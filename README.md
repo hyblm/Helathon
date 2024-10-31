@@ -1,3 +1,15 @@
+To install dependencies:
+```sh
+bun install
+```
+
+To run:
+```sh
+bun run dev
+```
+
+open http://localhost:3000
+
 # Návrh a realizace klientské webové aplikace
 
 Vytvoř a navrhni webovou aplikaci, která bude čerpat data z poskytnuté REST API

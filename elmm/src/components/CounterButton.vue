@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { Button } from "@/components/ui/button";
+import { ref } from 'vue'
+import { Button } from '@/components/ui/button'
 
-defineProps<{ msg: string }>();
+defineProps<{ msg: string }>()
 
-const count = ref(0);
+const count = ref(0)
 </script>
 
 <template>

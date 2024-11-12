@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-import { Button } from "@/components/ui/button";
+import HelloWorld from './components/HelloWorld.vue'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Icon } from "@iconify/vue";
-import { useColorMode } from "@vueuse/core";
+} from '@/components/ui/dropdown-menu'
+import { Icon } from '@iconify/vue'
+import { useColorMode } from '@vueuse/core'
 
-const mode = useColorMode({ disableTransition: false });
+const mode = useColorMode({ disableTransition: false })
 </script>
 
 <template>

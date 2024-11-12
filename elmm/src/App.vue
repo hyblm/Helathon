@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { Button } from "@/components/ui/button";
-import HelloWorld from "@/components/HelloWorld.vue";
-import ModeToggle from "@/components/ui/ModeToggle.vue";
-import { Icon } from "@iconify/vue";
-import Layout from "@/components/Layout.vue";
+import CounterButton from '@/components/CounterButton.vue'
+import BaseLayout from '@/components/BaseLayout.vue'
 </script>
 
 <template>
-  <Layout>
-    <HelloWorld class="m-auto" msg="Count" />
-  </Layout>
+  <BaseLayout>
+    <CounterButton class="m-auto" msg="Count" />
+  </BaseLayout>
 </template>

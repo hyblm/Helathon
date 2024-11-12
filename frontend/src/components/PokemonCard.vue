@@ -11,50 +11,74 @@ interface Pokemon {
   }
 }
 
-async function fetchPokemonFromEndpoint(endpoint: string) {
+async function fetchPokemon(ident: number | string) {
+  const endpoint = 'https://pokeapi.co/api/v2/pokemon/' + ident
   const response = await fetch(endpoint)
   pokemon.value = await response.json()
   console.log(pokemon.value)
 }
 
-async function fetchPokemonByName(name: string) {
-  const endpoint = 'https://pokeapi.co/api/v2/pokemon/' + name
-  fetchPokemonFromEndpoint(endpoint)
-}
-
-async function fetchPokemonById(id: number) {
-  const endpoint = 'https://pokeapi.co/api/v2/pokemon/' + id
-  fetchPokemonFromEndpoint(endpoint)
-}
-
 const MAX_POKEMON_ID = 1025
 async function fetchRandomPokemon() {
   const id = Math.floor(Math.random() * MAX_POKEMON_ID)
-  fetchPokemonById(id)
+  fetchPokemon(id)
 }
 
 fetchRandomPokemon()
+
+const BoundingRef: Ref<DOMRect | null> = ref(null)
+
+function setBoundingRef(event) {
+  BoundingRef.value = event.currentTarget.getBoundingClientRect()
+  console.log(BoundingRef.value)
+}
+
+function unsetBoundingRef(event) {
+  BoundingRef.value = null
+  event.currentTarget.style.setProperty('--x-rotation', `0deg`)
+  event.currentTarget.style.setProperty('--y-rotation', `0deg`)
+}
+
+function shiftCard(event) {
+  const x_percentage =
+    (event.y - BoundingRef.value.top) / BoundingRef.value.height
+  const x_rotation = (x_percentage - 0.5) * -20
+  const y_percentage =
+    (event.x - BoundingRef.value.left) / BoundingRef.value.width
+  const y_rotation = (y_percentage - 0.5) * 20
+  event.currentTarget.style.setProperty('--x-rotation', `${x_rotation}deg`)
+  event.currentTarget.style.setProperty('--y-rotation', `${y_rotation}deg`)
+  event.currentTarget.style.setProperty('--x', `${x_percentage * 100}%`)
+  event.currentTarget.style.setProperty('--y', `${y_percentage * 100}%`)
+}
 </script>
 
 <template>
-  <Card class="min-h-96 min-w-72 shadow-lg">
-    <CardHeader>
-      <p v-if="pokemon" class="flex justify-between">
-        <span class="text-xl font-bold">
-          {{ pokemon.name }}
-        </span>
-        <span class="opacity-50"> # {{ pokemon.id }} </span>
-      </p>
-    </CardHeader>
-    <CardContent>
-      <img
-        v-if="pokemon"
-        class="sprite w-full transition-transform hover:scale-125"
-        :src="pokemon.sprites.front_default"
-      />
-    </CardContent>
-    <CardFooter> </CardFooter>
-  </Card>
+  <div class="[perspective:800px]">
+    <Card
+      class="relative min-h-96 min-w-72 shadow-lg transition-transform ease-out [--glare:0.5] after:pointer-events-none after:absolute after:inset-0 hover:[transform:scale(1.1)_rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] after:hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,var(--glare))_20%,transparent_90%)] dark:[--glare:0.1]"
+      @mouseenter="setBoundingRef"
+      @mouseleave="unsetBoundingRef"
+      @mousemove="shiftCard"
+    >
+      <CardHeader>
+        <p v-if="pokemon" class="flex justify-between">
+          <span class="text-xl font-bold">
+            {{ pokemon.name }}
+          </span>
+          <span class="opacity-50"> # {{ pokemon.id }} </span>
+        </p>
+      </CardHeader>
+      <CardContent>
+        <img
+          v-if="pokemon"
+          class="sprite w-full"
+          :src="pokemon.sprites.front_default"
+        />
+      </CardContent>
+      <CardFooter> </CardFooter>
+    </Card>
+  </div>
 </template>
 
 <style>

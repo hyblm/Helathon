@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import CounterButton from '@/components/CounterButton.vue'
+  import PokemonCard from '@/components/PokemonCard.vue'
 import BaseLayout from '@/components/BaseLayout.vue'
 </script>
 
 <template>
   <BaseLayout>
-    <CounterButton class="m-auto" msg="Count" />
+    <PokemonCard class="m-auto" />
   </BaseLayout>
 </template>

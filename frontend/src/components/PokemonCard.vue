@@ -30,7 +30,6 @@ const BoundingRef: Ref<DOMRect | null> = ref(null)
 
 function setBoundingRef(event) {
   BoundingRef.value = event.currentTarget.getBoundingClientRect()
-  console.log(BoundingRef.value)
 }
 
 function unsetBoundingRef(event) {
@@ -40,23 +39,26 @@ function unsetBoundingRef(event) {
 }
 
 function shiftCard(event) {
-  const x_percentage =
-    (event.y - BoundingRef.value.top) / BoundingRef.value.height
-  const x_rotation = (x_percentage - 0.5) * -20
-  const y_percentage =
-    (event.x - BoundingRef.value.left) / BoundingRef.value.width
-  const y_rotation = (y_percentage - 0.5) * 20
+  const y_offset =
+    (BoundingRef.value.bottom - event.y) / BoundingRef.value.height
+  const x_offset = (BoundingRef.value.right - event.x) / BoundingRef.value.width
+
+  // matyas NOTE: X and Y are flipped here because we want a shift in the X direction
+  //              to cause rotation around the Y axis and vice versa for
+  const x_rotation = (y_offset - 0.5) * 20
+  const y_rotation = (0.5 - x_offset) * 20
+
   event.currentTarget.style.setProperty('--x-rotation', `${x_rotation}deg`)
   event.currentTarget.style.setProperty('--y-rotation', `${y_rotation}deg`)
-  event.currentTarget.style.setProperty('--x', `${x_percentage * 100}%`)
-  event.currentTarget.style.setProperty('--y', `${y_percentage * 100}%`)
+  event.currentTarget.style.setProperty('--x', `${x_offset * 100}%`)
+  event.currentTarget.style.setProperty('--y', `${y_offset * 100}%`)
 }
 </script>
 
 <template>
   <div class="[perspective:800px]">
     <Card
-      class="relative min-h-96 min-w-72 shadow-lg transition-transform ease-out [--glare:0.5] after:pointer-events-none after:absolute after:inset-0 hover:[transform:scale(1.1)_rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] after:hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,var(--glare))_20%,transparent_90%)] dark:[--glare:0.1]"
+      class="relative min-h-96 min-w-72 shadow-lg transition-transform ease-out [--glare:0.4] after:pointer-events-none after:absolute after:inset-0 after:rounded-lg hover:[transform:scale(1.1)_rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] after:hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,var(--glare))_20%,transparent_90%)] dark:[--glare:0.1]"
       @mouseenter="setBoundingRef"
       @mouseleave="unsetBoundingRef"
       @mousemove="shiftCard"
@@ -82,7 +84,7 @@ function shiftCard(event) {
 </template>
 
 <style>
-/* Matyas: taken from https://stackoverflow.com/questions/8028864/using-nearest-neighbor-with-css-zoom-on-canvas-and-img */
+/* matyas NOTE: taken from https://stackoverflow.com/questions/8028864/using-nearest-neighbor-with-css-zoom-on-canvas-and-img */
 .sprite {
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: crisp-edges;

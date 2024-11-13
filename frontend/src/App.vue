@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import PokemonCard from '@/components/PokemonCard.vue'
+import PokemonCard from '@/components/PokemonCard.vue'
 import BaseLayout from '@/components/BaseLayout.vue'
 </script>
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import PokemonCard from '@/components/PokemonCard.vue'
 import BaseLayout from '@/components/BaseLayout.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
   <BaseLayout>
-    <PokemonCard class="m-auto" />
+    <router-view />
   </BaseLayout>
 </template>

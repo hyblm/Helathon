@@ -7,7 +7,9 @@ import { Icon } from '@iconify/vue'
 <template>
   <div class="flex min-h-svh flex-col">
     <header class="flex items-center justify-between gap-3 p-5">
-      <p class="text-lg font-black tracking-tight">ELMM™</p>
+      <RouterLink to="/">
+        <p class="text-lg font-black tracking-tight">ELMM™</p>
+      </RouterLink>
       <ModeToggle />
     </header>
     <div class="container flex h-full flex-grow">

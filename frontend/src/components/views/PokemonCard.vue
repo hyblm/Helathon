@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue'
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
 
 const pokemon: Ref<Pokemon | null> = ref(null)
 interface Pokemon {
@@ -11,10 +15,17 @@ interface Pokemon {
   }
 }
 
-async function fetchPokemon(ident: number | string) {
-  const endpoint = 'https://pokeapi.co/api/v2/pokemon/' + ident
+if (route.params.id === undefined) {
+  fetchRandomPokemon()
+} else {
+  fetchPokemon(route.params.id)
+}
+
+async function fetchPokemon(ident: number | string | string[]) {
+  const endpoint: string = 'https://pokeapi.co/api/v2/pokemon/' + ident
   const response = await fetch(endpoint)
   pokemon.value = await response.json()
+  router.push('/pokemon/' + pokemon.value.name)
   console.log(pokemon.value)
 }
 
@@ -24,21 +35,19 @@ async function fetchRandomPokemon() {
   fetchPokemon(id)
 }
 
-fetchRandomPokemon()
-
 const BoundingRef: Ref<DOMRect | null> = ref(null)
 
-function setBoundingRef(event) {
+function setBoundingRef(event: MouseEvent) {
   BoundingRef.value = event.currentTarget.getBoundingClientRect()
 }
 
-function unsetBoundingRef(event) {
+function unsetBoundingRef(event: MouseEvent) {
   BoundingRef.value = null
   event.currentTarget.style.setProperty('--x-rotation', `0deg`)
   event.currentTarget.style.setProperty('--y-rotation', `0deg`)
 }
 
-function shiftCard(event) {
+function shiftCard(event: MouseEvent) {
   const y_offset =
     (BoundingRef.value.bottom - event.y) / BoundingRef.value.height
   const x_offset = (BoundingRef.value.right - event.x) / BoundingRef.value.width
@@ -56,7 +65,7 @@ function shiftCard(event) {
 </script>
 
 <template>
-  <div class="[perspective:800px]">
+  <div class="m-auto [perspective:800px]">
     <Card
       class="relative min-h-96 min-w-72 shadow-lg transition-transform ease-out [--glare:0.4] after:pointer-events-none after:absolute after:inset-0 after:rounded-lg hover:[transform:scale(1.1)_rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] after:hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,var(--glare))_20%,transparent_90%)] dark:[--glare:0.1]"
       @mouseenter="setBoundingRef"

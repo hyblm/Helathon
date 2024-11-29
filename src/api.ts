@@ -1,5 +1,3 @@
-"use server"
-
 import * as Types from './app/types'
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
@@ -25,9 +23,11 @@ async function post(endpoint: string, body: string) {
     headers: headers,
   });
 
+
   if (res.ok) {
     let data = await res.json();
     return data;
+
   }
 }
 
@@ -43,6 +43,9 @@ export async function getAllClientNumbers() {
   return call("clients/getAllClientNumbers");
 }
 
+export async function authenticateUser(loginName: string, password: string){
+  return call(`users/authentiateUser?loginName=${loginName}&password=${password}`)
+}
 
 export async function createSupplier(formData: FormData) {
   const newSupplier: Types.Supplier = formData;
@@ -70,3 +73,4 @@ export async function createUser(formData: FormData) {
 export async function insertUser(body: string) {
   return call("users/insertUser", body);
 }
+

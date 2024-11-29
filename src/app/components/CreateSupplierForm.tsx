@@ -1,6 +1,6 @@
 import Form from 'next/form'
 
-export function CreateSupplier() {
+export function CreateSupplierForm() {
     return (
         <div>
             <Form action="">

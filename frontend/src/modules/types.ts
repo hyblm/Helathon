@@ -1,19 +1,21 @@
-export interface Client {
+export interface User {
   id: bigint;
-  number: string;
-  land: string;
+  description: string;
   name: string;
-  createdAt: Date;
-  createdBy: Client;
+  password: string;
+  loginName: string;
+  updatedBy: string;
   updatedAt: Date;
-  updatedBy: Client;
-  city: string;
-  zipCode: string;
-  status: string;
-  streetHouseNumber: string;
-  packageNumberPrefix: string;
-  adminClientId: bigint;
-  oftpTargetSystem: string;
+  createdBy: string;
+  createdAt: Date;
+  lastLogin: Date;
+  status: number;
+  passwordChanged: Boolean;
+  passwordChangeable: Boolean;
+  passwordValidTo: Date;
+  passwordResetToken: string;
+  passwordResetTokenExpiredAt: Date;
+  passwordSalt: string;
 }
 
 export interface Supplier {

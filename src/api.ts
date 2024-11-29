@@ -1,4 +1,6 @@
-import * as Types from './app/types'
+"use server";
+
+import * as Types from "./app/types";
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
 const headers = {
@@ -23,11 +25,9 @@ async function post(endpoint: string, body: string) {
     headers: headers,
   });
 
-
   if (res.ok) {
     let data = await res.json();
     return data;
-
   }
 }
 
@@ -43,14 +43,17 @@ export async function getAllClientNumbers() {
   return call("clients/getAllClientNumbers");
 }
 
-export async function authenticateUser(loginName: string, password: string){
-  return call(`users/authentiateUser?loginName=${loginName}&password=${password}`)
+export async function authenticateUser(loginName: string, password: string) {
+  return call(
+    `users/authentiateUser?loginName=${loginName}&password=${password}`,
+  );
 }
 
 export async function createSupplier(formData: FormData) {
   const newSupplier: Types.Supplier = formData;
 
-  return call("suppliers/createSupplier", newSupplier)
+  return call("suppliers/createSupplier", newSupplier);
+}
 
 export async function getClientByNumber(number: string) {
   return call(`clients/getClientByNumber?number=${number}`);
@@ -65,12 +68,12 @@ export async function getAllExistingUserRoles() {
 }
 
 export async function createUser(formData: FormData) {
+  console.log(formData);
   let body: User = formData;
   console.log(body);
-  await insertUser(JSON.stringify(body));
+  // await insertUser(JSON.stringify(body));
 }
 
 export async function insertUser(body: string) {
-  return call("users/insertUser", body);
+  return post("users/insertUser", body);
 }
-

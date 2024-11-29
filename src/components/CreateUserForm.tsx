@@ -1,6 +1,5 @@
 import Form from "next/form";
-import { createUser, getAllUsers } from "@/api";
-import { Suspense } from "react";
+import { createUser } from "@/api";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
@@ -8,10 +7,6 @@ import { Button } from "./ui/button";
 export function CreateUserForm() {
   return (
     <>
-      <Suspense>
-        <UserList />
-      </Suspense>
-
       <Form action={createUser}>
         <Label htmlFor="name">Name</Label>
         <Input id="name" name="name" />
@@ -24,18 +19,5 @@ export function CreateUserForm() {
         <Button type="submit">Create User</Button>
       </Form>
     </>
-  );
-}
-
-async function UserList() {
-  const users = await getAllUsers();
-  console.log(users);
-
-  return (
-    <ul>
-      {users.map((user: any) => {
-        return <li key={user.id}>{user.name}</li>;
-      })}
-    </ul>
   );
 }

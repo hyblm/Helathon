@@ -1,4 +1,6 @@
-"use server";
+"use server"
+
+import * as Types from './app/types'
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
 const headers = {
@@ -41,6 +43,12 @@ export async function getAllClientNumbers() {
   return call("clients/getAllClientNumbers");
 }
 
+
+export async function createSupplier(formData: FormData) {
+  const newSupplier: Types.Supplier = formData;
+
+  return call("suppliers/createSupplier", newSupplier)
+
 export async function getClientByNumber(number: string) {
   return call(`clients/getClientByNumber?number=${number}`);
 }
@@ -51,12 +59,6 @@ export async function getAllClients() {
 
 export async function getAllExistingUserRoles() {
   return call("users/getAllExistingUserRoles");
-}
-
-interface User {
-  name: "string";
-  clientNumber: "string";
-  password: "string";
 }
 
 export async function createUser(formData: FormData) {

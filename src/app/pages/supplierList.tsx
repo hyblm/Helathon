@@ -1,26 +1,36 @@
 "use server";
 
-import {getClientSuppliers} from '../../api';
+import {getClientSuppliers, getUserDataById, deleteSupplier} from '../../api';
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
-import {Supplier} from "@/app/types";
+import {Supplier, UserData} from "@/app/types";
 import {Button} from "@/components/ui/button";
 import Link from 'next/link'
 import { cookies } from "next/headers";
 
 export default async function SupplierList() {
     const user = (await cookies()).get("userId")?.value;
-    const suppliers: Supplier[] = await getClientSuppliers(58);
+
+    let suppliers: Supplier[] = [];
+    let userData: UserData;
+
+    if (user) {
+        userData = await getUserDataById(user);
+        suppliers = await getClientSuppliers(userData.clientNumber.toString().substring(2, 4));
+        console.log("client " + userData.clientNumber.toString().substring(2, 4))
+    }
+
+    console.log("user " + user)
 
     return (
         <div>
             <Table>
                 <TableHeader>
-                    <TableHead>All suppliers of client {user}</TableHead>
+                    <TableHead>All suppliers of client {userData.clientNumber}</TableHead>
                     <TableRow>
                         <TableHead className="w-[100px]">Name</TableHead>
                         <TableHead>Client ID</TableHead>
                         <TableHead>Admin</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead></TableHead>
                     </TableRow>
                 </TableHeader>
                 {suppliers.length === 0 ? (
@@ -38,7 +48,7 @@ export default async function SupplierList() {
                                 {supplier.adminUserId}
                             </TableCell>
                             <TableCell>
-                                <Button>Delete</Button>
+                                <Button onClick={deleteSupplier(supplier.id.toString())}>Delete</Button>
                             </TableCell>
                         </TableRow>
                     ))}

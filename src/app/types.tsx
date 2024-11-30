@@ -74,3 +74,37 @@ export interface Supplier {
   asnNotificationInHours: number;
   asnWarningInHours: number;
 }
+
+export interface UserData {
+    id: number,
+    phone: string,
+    mobileNumber: string,
+    fax: string,
+    email: string,
+    labWarning: string,
+    notificationType: string,
+    userId: 0,
+    supplierId: 0,
+    clientNumber: string,
+    language: string,
+    status: string,
+    createdAt: Date,
+    createdBy: string,
+    updatedAt: Date,
+    updatedBy: string,
+    ebWarning: string,
+    ldapUid: string,
+    ebNotification: string,
+    zaNotification: string,
+    zaWarning: string,
+    besNotification: string,
+    besWarning: string,
+    bewWarning: string,
+    bruWarning: string,
+    mabWarning: string,
+    unassignedSupplierNumberWarning: string,
+    inactiveUsersWarning: string,
+    inactiveSupAdmWarning: string,
+    inactiveCliAdmWarning: string,
+    asnWarning: string
+}

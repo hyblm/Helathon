@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deleteUser, getAllUsers, updateUser } from "@/api";
+import { deleteUser, getAllUsers, updateUser, updateUserData } from "@/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ export function UserTable() {
                   <Button
                     className="ml-auto"
                     onClick={async () => {
-                      await updateUser(user.id);
+                      await updateUserData(user.id);
                     }}
                   >
                     <Pencil />

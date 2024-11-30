@@ -6,27 +6,30 @@ import {
 import { cookies } from "next/headers";
 
 export default async function Home() {
-  const user = (await cookies()).get("userId")?.value;
+  const cookie = (await cookies()).get("user")?.value;
+  let user;
+  if (cookie) {
+    user = JSON.parse(cookie);
+  }
   const roles = await getAllExistingUserRoles();
   let groups = [];
-  let suppliers = [];
   if (user) {
-    groups = await getUserGroupsByUserId(user);
-    // suppliers = await getSuppliersWithAdminUserId(user);
+    groups = await getUserGroupsByUserId(user.id);
   }
   const permissions = groups.map(({ groupId }) => {
     const perm = roles.find((role) => role.id == groupId);
     return perm;
   });
-  console.log(permissions);
+  // console.log(permissions);
+  console.log(user);
 
   return (
     <div className="container m-auto">
       <main className="pb-40">
         <p>
           You are logged-in as user
-          <span className="text-muted-foreground">(id: {user})</span> with these
-          roles:
+          <span className="text-muted-foreground">(id: {user.id})</span> with
+          these roles:
         </p>
         <ul className="divide-muted-foreground">
           {permissions.map((perm) => (
@@ -35,16 +38,6 @@ export default async function Home() {
                 {perm.name}
               </span>{" "}
               - {perm.description}
-            </li>
-          ))}
-        </ul>
-        <ul className="divide-muted-foreground">
-          {suppliers.map((supplier) => (
-            <li key={supplier.id} className="py-2">
-              <span className="bg-muted text-muted-foreground rounded p-1">
-                {supplier.name}
-              </span>{" "}
-              - {supplier.description}
             </li>
           ))}
         </ul>

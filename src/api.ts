@@ -46,12 +46,23 @@ async function post(endpoint: string, body: string) {
   const res = await fetch(url, {
     method: "POST",
     body: body,
-    headers: {
-      "Content-Type": "application/json",
-      SecurityToken: process.env.SECURITY_TOKEN,
-    },
+    headers: headers,
   });
+  console.log(res);
+  if (!res.ok) {
+    return "request failed";
+  }
+  let data = await res.json();
+  return data;
+}
 
+async function put(endpoint: string, body: string) {
+  const url = `${base_url}${endpoint}`;
+  const res = await fetch(url, {
+    method: "PUT",
+    body: body,
+    headers: headers,
+  });
   console.log(res);
   if (!res.ok) {
     return "request failed";
@@ -80,7 +91,7 @@ export async function login(state: FormState, formData: FormData) {
   );
   console.log(user);
   if (user && user.id) {
-    await createSession(user?.id);
+    await createSession(user);
     redirect("/dashboard");
   }
   return user;
@@ -167,6 +178,14 @@ export async function deleteUser(id: string) {
 
 export async function updateUser(id: string) {
   return "not implemented";
+}
+
+export async function updateUserData(id: string) {
+  const body = {
+    id: id,
+    clientNumber: "1O61",
+  };
+  return put(`/users/updateUserData`, JSON.stringify(body));
 }
 
 export async function getUserGroupsByUserId(id: string) {

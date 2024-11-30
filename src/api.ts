@@ -4,17 +4,12 @@ import { redirect } from "next/navigation";
 import { FormState, LoginFormSchema } from "./app/lib/definitions";
 import { createSession } from "./app/lib/session";
 import * as Types from "./app/types";
-import { Type } from "lucide-react";
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
 const headers = {
   securitytoken: process.env.SECURITY_TOKEN,
   "Content-Type": "application/json",
   Accept: "application/json",
-};
-const postHeaders = {
-  SecurityToken: "4aPU0WCyaM",
-  "Content-Type": "application/json",
 };
 
 const formDataToObject = (formData: FormData) => {
@@ -46,10 +41,7 @@ async function post(endpoint: string, body: string) {
   const res = await fetch(url, {
     method: "POST",
     body: body,
-    headers: {
-      "Content-Type": "application/json",
-      SecurityToken: process.env.SECURITY_TOKEN,
-    },
+    headers: headers,
   });
 
   console.log(res);
@@ -58,6 +50,19 @@ async function post(endpoint: string, body: string) {
   }
   let data = await res.json();
   return data;
+}
+
+async function del(endpoint: string) {
+  const url = `${base_url}${endpoint}`;
+  const res = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      SecurityToken: process.env.SECURITY_TOKEN,
+    },
+  });
+
+  return res.statusText;
 }
 
 export async function getAllUsers() {
@@ -117,6 +122,8 @@ export async function createSupplier(formData: FormData) {
   console.log(JSON.stringify(body));
 
   await post("suppliers/createSupplier", JSON.stringify(body));
+
+  redirect("/suppliers");
 }
 
 export async function getClientSuppliers(id: string) {
@@ -162,7 +169,7 @@ export async function insertUser(body: string) {
 }
 
 export async function deleteUser(id: string) {
-  return call(`users/deleteUser?id=${id}`);
+  return del(`users/deleteUser?id=${id}`);
 }
 
 export async function updateUser(id: string) {
@@ -176,6 +183,15 @@ export async function getUserGroupsByUserId(id: string) {
 export async function getSuppliersWithAdminUserId(id: string) {
   return call(`users/getSuppliersWithAdminUserId?userId=${id}`);
 }
+
+export async function getUserDataById(id: string) {
+  return call(`users/getUserDataByUserId?userId=${id}`);
+}
+
+export async function deleteSupplier(id: string) {
+  return del(`suppliers/deleteSupplier?id=${id}`);
+}
+
 
 export async function insertShipment(formData: FormData) {
   let body: Types.PartialShipments = formDataToObject(formData);

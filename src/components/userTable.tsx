@@ -14,6 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export function UserTable() {
   const [users, setUsers] = useState(null);
@@ -26,9 +27,6 @@ export function UserTable() {
   return (
     <ScrollArea className="h-96 rounded-md border">
       <Table className="">
-        <TableCaption>
-          List of all {users ? users.length : 0} users
-        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">id</TableHead>
@@ -57,7 +55,8 @@ export function UserTable() {
                   <Button
                     variant="destructive"
                     onClick={async () => {
-                      await deleteUser(user.id);
+                      let status = await deleteUser(user.id);
+                      toast(`user ${user.name} deleted with status: ${status}`);
                     }}
                   >
                     <Trash />
@@ -68,6 +67,7 @@ export function UserTable() {
           ))}
         </TableBody>
       </Table>
+      //{" "}
     </ScrollArea>
   );
 }

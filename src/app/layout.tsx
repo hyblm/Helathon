@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -5,7 +6,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserRound } from "lucide-react";
+import { LogIn, UserRound } from "lucide-react";
+import { DashboardTabs } from "@/components/DashboardTabs";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -44,6 +47,7 @@ export default function RootLayout({
             <main className="h-full grid items-center font-[family-name:var(--font-geist-sans)]">
               {children}
             </main>
+            <Toaster />
             <footer className="row-start-3 text-muted-foreground flex gap-6 flex-wrap items-center justify-center">
               © {new Date().getFullYear()}
             </footer>
@@ -54,20 +58,24 @@ export default function RootLayout({
   );
 }
 
-function Header() {
+async function Header() {
+  const user = (await cookies()).get("userId")?.value;
   return (
     <header className="flex p-5 justify-between items-center text-center">
       <Link href="/">
         <span className="font-black tracking-tight">📦 ELMM</span> | Supplier
         Management
       </Link>
+      <DashboardTabs user={user} />
       <div className="flex gap-3 items-center">
-        <Avatar>
-          <AvatarImage></AvatarImage>
-          <AvatarFallback>
-            <UserRound />
-          </AvatarFallback>
-        </Avatar>
+        <Link href="/login">
+          <Avatar>
+            <AvatarImage></AvatarImage>
+            <AvatarFallback>
+              <LogIn />
+            </AvatarFallback>
+          </Avatar>
+        </Link>
         <ModeToggle />
       </div>
     </header>

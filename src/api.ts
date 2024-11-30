@@ -1,5 +1,6 @@
 "use server";
 
+import { FormState, LoginFormSchema } from "./app/lib/definitions";
 import * as Types from "./app/types";
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
@@ -7,28 +8,35 @@ const headers = {
   securitytoken: process.env.SECURITY_TOKEN,
 };
 async function call(endpoint: string) {
-  let url = `${base_url}${endpoint}`;
-  let res = await fetch(url, {
+  const url = `${base_url}${endpoint}`;
+  const res = await fetch(url, {
     headers: headers,
   });
 
-  if (res.ok) {
-    let data = await res.json();
-    return data;
+  console.log("response", res);
+  if (!res.ok) {
+    console.log("request failed");
+    return { statusText: res.statusText };
   }
+  let data = await res.json();
+  console.log(data);
+  return data;
 }
 
 async function post(endpoint: string, body: string) {
-  let url = `${base_url}${endpoint}`;
-  let res = await fetch(url, {
+  const url = `${base_url}${endpoint}`;
+  const res = await fetch(url, {
+    method: "POST",
     body: body,
     headers: headers,
   });
 
-  if (res.ok) {
-    let data = await res.json();
-    return data;
+  console.log(res);
+  if (!res.ok) {
+    return "request failed";
   }
+  let data = await res.json();
+  return data;
 }
 
 export async function getAllUsers() {
@@ -43,10 +51,35 @@ export async function getAllClientNumbers() {
   return call("clients/getAllClientNumbers");
 }
 
+export async function login(state: FormState, formData: FormData) {
+  console.log(formData);
+  const user = await authenticateUser(formData.loginName, formData.password);
+  return user;
+}
+
 export async function authenticateUser(loginName: string, password: string) {
-  return call(
-    `users/authentiateUser?loginName=${loginName}&password=${password}`,
-  );
+  return {
+    id: 58,
+    description: "string",
+    name: "asdf",
+    password: "asdfasdf",
+    loginName: "asdf",
+    updatedBy: "string",
+    updatedAt: "2024-11-30",
+    createdBy: "string",
+    createdAt: "2024-11-30",
+    lastLogin: "2024-11-30",
+    status: 0,
+    passwordChanged: 0,
+    passwordChangeable: 0,
+    passwordValidTo: "2024-11-30",
+    passwordResetToken: "string",
+    passwordResetTokenExpiredAt: "2024-11-30",
+    passwordSalt: "string",
+  };
+  // return call(
+  //   `users/authenticateUser?loginName=${loginName}&password=${password}`,
+  // );
 }
 
 export async function createSupplier(formData: FormData) {
@@ -67,13 +100,36 @@ export async function getAllExistingUserRoles() {
   return call("users/getAllExistingUserRoles");
 }
 
+interface NewUserRequestPojo {
+  name: string;
+  clientNumber: string;
+  loginName: string;
+  password: string;
+}
 export async function createUser(formData: FormData) {
   console.log(formData);
-  let body: User = formData;
-  console.log(body);
-  // await insertUser(JSON.stringify(body));
+  const body = {
+    name: formData.get("name"),
+    password: formData.get("password"),
+    loginName: formData.get("loginName"),
+    clientNumber: "1061",
+    phone: "string",
+    fax: "string",
+    mobileNumber: "string",
+    email: "string",
+  };
+  console.log("body", body);
+  await insertUser(JSON.stringify(body));
 }
 
 export async function insertUser(body: string) {
   return post("users/insertUser", body);
+}
+
+export async function deleteUser(id: string) {
+  return call(`users/deleteUser?id=${id}`);
+}
+
+export async function updateUser(id: string) {
+  return "not implemented";
 }

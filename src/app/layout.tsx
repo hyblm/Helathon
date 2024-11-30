@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -39,26 +39,37 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <header className="flex p-5 justify-between items-center text-center">
-            <Link href="/">
-              <span className="font-black tracking-tight">📦 ELMM</span> |
-              Supplier Management
-            </Link>
-            <div className="flex gap-3 items-center">
-              <Avatar>
-                <AvatarImage></AvatarImage>
-                <AvatarFallback>
-                  <UserRound />
-                </AvatarFallback>
-              </Avatar>
-              <ModeToggle />
-            </div>
-          </header>
-          <main className="grid grid-rows-[20px_1fr_20px] p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            {children}
-          </main>
+          <div className="grid grid-rows-[5rem_1fr_5rem] h-svh">
+            <Header />
+            <main className="h-full grid items-center font-[family-name:var(--font-geist-sans)]">
+              {children}
+            </main>
+            <footer className="row-start-3 text-muted-foreground flex gap-6 flex-wrap items-center justify-center">
+              © {new Date().getFullYear()}
+            </footer>
+          </div>
         </ThemeProvider>
       </body>
     </html>
+  );
+}
+
+function Header() {
+  return (
+    <header className="flex p-5 justify-between items-center text-center">
+      <Link href="/">
+        <span className="font-black tracking-tight">📦 ELMM</span> | Supplier
+        Management
+      </Link>
+      <div className="flex gap-3 items-center">
+        <Avatar>
+          <AvatarImage></AvatarImage>
+          <AvatarFallback>
+            <UserRound />
+          </AvatarFallback>
+        </Avatar>
+        <ModeToggle />
+      </div>
+    </header>
   );
 }

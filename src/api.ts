@@ -1,6 +1,8 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { FormState, LoginFormSchema } from "./app/lib/definitions";
+import { createSession } from "./app/lib/session";
 import * as Types from "./app/types";
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
@@ -54,7 +56,10 @@ export async function getAllClientNumbers() {
 export async function login(state: FormState, formData: FormData) {
   console.log(formData);
   const user = await authenticateUser(formData.loginName, formData.password);
-  return user;
+  if (user) {
+    await createSession(user?.id);
+    redirect("/dashboard");
+  }
 }
 
 export async function authenticateUser(loginName: string, password: string) {

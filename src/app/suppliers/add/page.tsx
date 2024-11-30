@@ -20,7 +20,7 @@ export default async function Home() {
                         <input id="land" name="land" type="text" placeholder="Enter country"></input>
                         <input id="phone" name="phone" type="text" placeholder="Enter phone number"></input>
                         <input id="fax" name="fax" type="text" placeholder="Enter fax number"></input>
-                        <input id="mail" name="mail" type="text" placeholder="Enter email address"></input>
+                        <input id="email" name="email" type="email" placeholder="Enter email address"></input>
                         <Button type="submit">Create</Button>
                     </Form>
                 </div>

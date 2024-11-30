@@ -5,16 +5,17 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import {Supplier} from "@/app/types";
 import {Button} from "@/components/ui/button";
 import Link from 'next/link'
+import { cookies } from "next/headers";
 
 export default async function SupplierList() {
-     //TODO passovat id ze session
-    const suppliers: Supplier[] = await getClientSuppliers(61);
+    const user = (await cookies()).get("userId")?.value;
+    const suppliers: Supplier[] = await getClientSuppliers(58);
 
     return (
         <div>
             <Table>
                 <TableHeader>
-                    <TableHead>All suppliers of client</TableHead>
+                    <TableHead>All suppliers of client {user}</TableHead>
                     <TableRow>
                         <TableHead className="w-[100px]">Name</TableHead>
                         <TableHead>Client ID</TableHead>

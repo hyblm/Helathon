@@ -49,10 +49,10 @@ export async function DashboardTabs({ user }) {
       </li>
       <li className="">
         <Link
-          href="/Shippments"
+          href="/shipments"
           className="bg-muted text-muted-foreground rounded p-3"
         >
-          Manage Shippments
+          Manage Shipments
         </Link>
       </li>
       <li className="">

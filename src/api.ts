@@ -176,3 +176,11 @@ export async function getUserGroupsByUserId(id: string) {
 export async function getSuppliersWithAdminUserId(id: string) {
   return call(`users/getSuppliersWithAdminUserId?userId=${id}`);
 }
+
+export async function insertShipment(formData: FormData) {
+  let body: Types.PartialShipments = formDataToObject(formData);
+
+  console.log(JSON.stringify(body));
+
+  await post("shipments/insertShipment", JSON.stringify(body));
+}

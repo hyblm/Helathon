@@ -41,7 +41,7 @@ async function post(endpoint: string, body: string) {
   const res = await fetch(url, {
     method: "POST",
     body: body,
-    headers: headers
+    headers: headers,
   });
 
   console.log(res);
@@ -123,7 +123,7 @@ export async function createSupplier(formData: FormData) {
 
   await post("suppliers/createSupplier", JSON.stringify(body));
 
-  redirect("/suppliers")
+  redirect("/suppliers");
 }
 
 export async function getClientSuppliers(id: string) {
@@ -189,5 +189,6 @@ export async function getUserDataById(id: string) {
 }
 
 export async function deleteSupplier(id: string) {
-  del(`suppliers/deleteSupplier?id=${id}`);
+  return del(`suppliers/deleteSupplier?id=${id}`);
 }
+

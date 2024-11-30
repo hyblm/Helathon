@@ -25,49 +25,50 @@ export function UserTable() {
   }, []);
   console.log(users);
   return (
-    // <ScrollArea className="h-96 rounded-md border">
-    <Table className="">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">id</TableHead>
-          <TableHead>name</TableHead>
-          <TableHead>loginName</TableHead>
-          <TableHead className="text-right">password</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users?.map((user: UserTableRowProps) => (
-          <TableRow key={user.id} className="justify-end">
-            <TableCell className="font-medium">{user.id}</TableCell>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.loginName}</TableCell>
-            <TableCell className="text-right">{user.password}</TableCell>
-            <TableCell className="">
-              <div className=" flex gap-5 ">
-                <Button
-                  className="ml-auto"
-                  onClick={async () => {
-                    await updateUser(user.id);
-                  }}
-                >
-                  <Pencil />
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={async () => {
-                    let status = await deleteUser(user.id);
-                    toast(`user ${user.name} deleted with status: ${status}`);
-                  }}
-                >
-                  <Trash />
-                </Button>
-              </div>
-            </TableCell>
+    <ScrollArea className="h-96 rounded-md border">
+      <Table className="">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">id</TableHead>
+            <TableHead>name</TableHead>
+            <TableHead>loginName</TableHead>
+            <TableHead className="text-right">password</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-    // </ScrollArea>
+        </TableHeader>
+        <TableBody>
+          {users?.map((user: UserTableRowProps) => (
+            <TableRow key={user.id} className="justify-end">
+              <TableCell className="font-medium">{user.id}</TableCell>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.loginName}</TableCell>
+              <TableCell className="text-right">{user.password}</TableCell>
+              <TableCell className="">
+                <div className=" flex gap-5 ">
+                  <Button
+                    className="ml-auto"
+                    onClick={async () => {
+                      await updateUser(user.id);
+                    }}
+                  >
+                    <Pencil />
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={async () => {
+                      let status = await deleteUser(user.id);
+                      toast(`user ${user.name} deleted with status: ${status}`);
+                    }}
+                  >
+                    <Trash />
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      //{" "}
+    </ScrollArea>
   );
 }
 

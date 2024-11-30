@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { FormState, LoginFormSchema } from "./app/lib/definitions";
 import { createSession } from "./app/lib/session";
 import * as Types from "./app/types";
-import { Type } from "lucide-react";
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
 const headers = {
@@ -51,6 +50,19 @@ async function post(endpoint: string, body: string) {
   }
   let data = await res.json();
   return data;
+}
+
+async function del(endpoint: string) {
+  const url = `${base_url}${endpoint}`;
+  const res = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      SecurityToken: process.env.SECURITY_TOKEN,
+    },
+  });
+
+  return res.statusText;
 }
 
 export async function getAllUsers() {
@@ -157,7 +169,7 @@ export async function insertUser(body: string) {
 }
 
 export async function deleteUser(id: string) {
-  return call(`users/deleteUser?id=${id}`);
+  return del(`users/deleteUser?id=${id}`);
 }
 
 export async function updateUser(id: string) {

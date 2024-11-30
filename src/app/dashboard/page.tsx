@@ -1,18 +1,12 @@
-import {
-  getAllExistingUserRoles,
-  getSuppliersWithAdminUserId,
-  getUserGroupsByUserId,
-} from "@/api";
+import { getAllExistingUserRoles, getUserGroupsByUserId } from "@/api";
 import { cookies } from "next/headers";
 
 export default async function Home() {
   const user = (await cookies()).get("userId")?.value;
   const roles = await getAllExistingUserRoles();
   let groups = [];
-  let suppliers = [];
   if (user) {
     groups = await getUserGroupsByUserId(user);
-    // suppliers = await getSuppliersWithAdminUserId(user);
   }
   const permissions = groups.map(({ groupId }) => {
     const perm = roles.find((role) => role.id == groupId);
@@ -29,22 +23,12 @@ export default async function Home() {
           roles:
         </p>
         <ul className="divide-muted-foreground">
-          {permissions.map((perm) => (
-            <li key={perm.id} className="py-2">
+          {permissions.map((permission) => (
+            <li key={permission.id} className="py-2">
               <span className="bg-muted text-muted-foreground rounded p-1">
-                {perm.name}
+                {permission.name}
               </span>{" "}
-              - {perm.description}
-            </li>
-          ))}
-        </ul>
-        <ul className="divide-muted-foreground">
-          {suppliers.map((supplier) => (
-            <li key={supplier.id} className="py-2">
-              <span className="bg-muted text-muted-foreground rounded p-1">
-                {supplier.name}
-              </span>{" "}
-              - {supplier.description}
+              - {permission.description}
             </li>
           ))}
         </ul>

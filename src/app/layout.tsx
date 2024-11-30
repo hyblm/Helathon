@@ -74,8 +74,7 @@ async function Header() {
   return (
     <header className="flex p-5 justify-between items-center text-center">
       <Link href="/">
-        <span className="font-black tracking-tight">📦 ELMM</span> | Supplier
-        Management
+        <span className="font-black tracking-tight">📦 ELMM</span>
       </Link>
       <DashboardTabs user={user} />
       <div className="flex gap-3 items-center">

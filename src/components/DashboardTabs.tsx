@@ -23,27 +23,46 @@ const roleMap = {
 
 export async function DashboardTabs({ user }) {
   if (!user) {
-    redirect("/login");
+    // redirect("/login");
+  } else {
+    const roles = await getAllExistingUserRoles();
+    const groups = await getUserGroupsByUserId(user);
+    const permissions = groups.map(({ groupId }) => {
+      const perm = roles.find((role) => role.id == groupId);
+      return perm;
+    });
+    console.log(permissions);
+    // const showSuppliers: boolean = groups.id === 8888;
+    // const showShippments: boolean = groups.id === 6666 || showSuppliers;
+    // const showUsers: boolean = groups.id === 6666 || showShippments;
   }
-  const roles = await getAllExistingUserRoles();
-  const groups = await getUserGroupsByUserId(user);
-  const permissions = groups.map(({ groupId }) => {
-    const perm = roles.find((role) => role.id == groupId);
-    return perm;
-  });
-  console.log(permissions);
+
   return (
-    <ul className="divide-muted-foreground">
-      {permissions.map((permission) => (
-        <li key={permission.id} className="p-2">
-          <Link
-            href={roleMap[permission.name]?.page}
-            className="bg-muted text-muted-foreground rounded p-3"
-          >
-            {roleMap[permission.name]?.name}
-          </Link>
-        </li>
-      ))}
+    <ul className="divide-muted-foreground items-center flex gap-3">
+      <li className="">
+        <Link
+          href="/suppliers"
+          className="bg-muted text-muted-foreground rounded p-3"
+        >
+          Manage Suppliers
+        </Link>
+      </li>
+      <li className="">
+        <Link
+          href="/Shippments"
+          className="bg-muted text-muted-foreground rounded p-3"
+        >
+          Manage Shippments
+        </Link>
+      </li>
+      <li className="">
+        <Link
+          href="/users"
+          className="bg-muted text-muted-foreground rounded p-3"
+        >
+          Manage Users
+        </Link>
+      </li>
     </ul>
   );
 }

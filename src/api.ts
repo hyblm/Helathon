@@ -52,6 +52,22 @@ async function post(endpoint: string, body: string) {
   return data;
 }
 
+async function put(endpoint: string, body: string) {
+  const url = `${base_url}${endpoint}`;
+  const res = await fetch(url, {
+    method: "PUT",
+    body: body,
+    headers: headers,
+  });
+
+  console.log(res);
+  if (!res.ok) {
+    return "request failed";
+  }
+  let data = await res.json();
+  return data;
+}
+
 async function del(endpoint: string) {
   const url = `${base_url}${endpoint}`;
   const res = await fetch(url, {
@@ -172,8 +188,8 @@ export async function deleteUser(id: string) {
   return del(`users/deleteUser?id=${id}`);
 }
 
-export async function updateUser(id: string) {
-  return "not implemented";
+export async function updateUser(body: string) {
+  return put("/users/updateUser", body);
 }
 
 export async function getUserGroupsByUserId(id: string) {
@@ -196,7 +212,6 @@ export async function deleteShipment(id: string) {
   return del(`suppliers/deleteShipment?id=${id}`);
 }
 
-
 export async function insertShipment(formData: FormData) {
   let body: Types.PartialShipments = formDataToObject(formData);
 
@@ -207,19 +222,19 @@ export async function insertShipment(formData: FormData) {
 
 export async function fetchShipments() {
   try {
-      const response = await fetch("/api/shipments");
-      if (!response.ok) {
-          throw new Error(`Failed to fetch shipments: ${response.statusText}`);
-      }
-      const data = await response.json();
+    const response = await fetch("/api/shipments");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch shipments: ${response.statusText}`);
+    }
+    const data = await response.json();
 
-      // Předpokládáme, že backend vrací seznam zásilek rozdělených na "pending" a "sent"
-      return {
-          pending: data.filter((shipment) => shipment.status === "pending"),
-          sent: data.filter((shipment) => shipment.status === "sent"),
-      };
+    // Předpokládáme, že backend vrací seznam zásilek rozdělených na "pending" a "sent"
+    return {
+      pending: data.filter((shipment) => shipment.status === "pending"),
+      sent: data.filter((shipment) => shipment.status === "sent"),
+    };
   } catch (error) {
-      console.error(error);
-      return { pending: [], sent: [] }; // Pokud dojde k chybě, vrací prázdný seznam
+    console.error(error);
+    return { pending: [], sent: [] }; // Pokud dojde k chybě, vrací prázdný seznam
   }
 }

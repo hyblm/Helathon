@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogIn, UserRound } from "lucide-react";
 import { DashboardTabs } from "@/components/DashboardTabs";
 import { Toaster } from "@/components/ui/sonner";
+import { getAllExistingUserRoles, getUserGroupsByUserId } from "@/api";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -60,6 +61,16 @@ export default function RootLayout({
 
 async function Header() {
   const user = (await cookies()).get("userId")?.value;
+  // const roles = await getAllExistingUserRoles();
+  // let groups = [];
+  // if (user) {
+  //   groups = await getUserGroupsByUserId(user);
+  // }
+  // const permissions = groups.map(({ groupId }) => {
+  //   const perm = roles.find((role) => role.id == groupId);
+  //   return perm;
+  // });
+  // console.log(permissions);
   return (
     <header className="flex p-5 justify-between items-center text-center">
       <Link href="/">

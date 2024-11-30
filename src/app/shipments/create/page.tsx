@@ -10,8 +10,8 @@ export default async function Home() {
     <div className="container m-auto">
       <Form className="grid grid-cols-2 gap-2" action={insertShipment}>
         <Input
-          id="packingSlipId"
-          name="packingSlipId"
+          id="id"
+          name="id"
           type="text"
           placeholder="Enter packing slip ID"
           required
@@ -21,14 +21,12 @@ export default async function Home() {
           name="manufacturingDate"
           type="date"
           placeholder="Enter manufacturing date"
-          required
         />
         <Input
           id="storageLocation"
           name="storageLocation"
           type="text"
           placeholder="Enter storage location"
-          required
         />
         <Input
           id="consumptionPoint"
@@ -59,14 +57,12 @@ export default async function Home() {
           name="batchNumber"
           type="text"
           placeholder="Enter batch number"
-          required
         />
         <Input
           id="shippingDate"
           name="shippingDate"
           type="date"
           placeholder="Enter shipping date"
-          required
         />
         <Input
           id="changeCode"
@@ -79,14 +75,12 @@ export default async function Home() {
           name="partNumberSupplier"
           type="text"
           placeholder="Enter part number (supplier)"
-          required
         />
         <Input
           id="quantity2"
           name="quantity2"
           type="number"
           placeholder="Enter quantity"
-          required
         />
         <Input
           id="unitOfMeasure"
@@ -120,4 +114,3 @@ export default async function Home() {
     </div>
   );
 }
-

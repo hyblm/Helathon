@@ -213,11 +213,14 @@ export async function deleteShipment(id: string) {
 }
 
 export async function insertShipment(formData: FormData) {
-  let body: Types.PartialShipments = formDataToObject(formData);
+  const data = {
+    id: formData.get("id"),
+  };
 
-  console.log(JSON.stringify(body));
+  const body = JSON.stringify(data);
+  console.log(body);
 
-  await post("shipments/insertShipment", JSON.stringify(body));
+  await post("shipments/insertShipment", body);
 }
 
 export async function fetchShipments() {

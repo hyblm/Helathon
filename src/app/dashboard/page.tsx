@@ -9,7 +9,7 @@ export default async function Home() {
     groups = await getUserGroupsByUserId(user);
   }
   const permissions = groups.map(({ groupId }) => {
-    const perm = roles.find((role) => role.id == groupId);
+    const perm = roles.find((roleMap) => roleMap.id == groupId);
     return perm;
   });
   console.log(permissions);

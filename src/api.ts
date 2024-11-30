@@ -192,3 +192,34 @@ export async function deleteSupplier(id: string) {
   return del(`suppliers/deleteSupplier?id=${id}`);
 }
 
+export async function deleteShipment(id: string) {
+  return del(`suppliers/deleteShipment?id=${id}`);
+}
+
+
+export async function insertShipment(formData: FormData) {
+  let body: Types.PartialShipments = formDataToObject(formData);
+
+  console.log(JSON.stringify(body));
+
+  await post("shipments/insertShipment", JSON.stringify(body));
+}
+
+export async function fetchShipments() {
+  try {
+      const response = await fetch("/api/shipments");
+      if (!response.ok) {
+          throw new Error(`Failed to fetch shipments: ${response.statusText}`);
+      }
+      const data = await response.json();
+
+      // Předpokládáme, že backend vrací seznam zásilek rozdělených na "pending" a "sent"
+      return {
+          pending: data.filter((shipment) => shipment.status === "pending"),
+          sent: data.filter((shipment) => shipment.status === "sent"),
+      };
+  } catch (error) {
+      console.error(error);
+      return { pending: [], sent: [] }; // Pokud dojde k chybě, vrací prázdný seznam
+  }
+}

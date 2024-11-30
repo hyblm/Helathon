@@ -12,10 +12,6 @@ const headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
 };
-const postHeaders = {
-  SecurityToken: "4aPU0WCyaM",
-  "Content-Type": "application/json",
-};
 
 const formDataToObject = (formData: FormData) => {
   const obj: { [key: string]: string } = {};
@@ -46,10 +42,7 @@ async function post(endpoint: string, body: string) {
   const res = await fetch(url, {
     method: "POST",
     body: body,
-    headers: {
-      "Content-Type": "application/json",
-      SecurityToken: process.env.SECURITY_TOKEN,
-    },
+    headers: headers
   });
 
   console.log(res);
@@ -117,6 +110,8 @@ export async function createSupplier(formData: FormData) {
   console.log(JSON.stringify(body));
 
   await post("suppliers/createSupplier", JSON.stringify(body));
+
+  redirect("/suppliers")
 }
 
 export async function getClientSuppliers(id: string) {
@@ -175,4 +170,12 @@ export async function getUserGroupsByUserId(id: string) {
 
 export async function getSuppliersWithAdminUserId(id: string) {
   return call(`users/getSuppliersWithAdminUserId?userId=${id}`);
+}
+
+export async function getUserDataById(id: string) {
+  return call(`users/getUserDataByUserId?userId=${id}`);
+}
+
+export async function deleteSupplier(id: string) {
+  del(`suppliers/deleteSupplier?id=${id}`);
 }

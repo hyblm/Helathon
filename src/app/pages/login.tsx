@@ -55,7 +55,7 @@ function SubmitButton({ isPending }: SubmitProps) {
       type="submit"
       className="w-full py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
     >
-      Sign Up
+      Sign In
     </Button>
   );
 }

@@ -57,9 +57,9 @@ export default function SupplierList({ user, userData, suppliers }) {
           ))}
         </TableBody>
       </Table>
-      <div>
-        <Link href="/suppliers/add">
-          <Button>Add</Button>
+      <div className="grid grid-cols-2 pt-5 gap-2">
+        <Link className="w-full" href="/suppliers/add">
+          <Button className="w-full">Add</Button>
         </Link>
         <Button>Edit</Button>
       </div>

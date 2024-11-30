@@ -4,10 +4,11 @@ import { cookies } from "next/headers";
 import { getAllExistingUserRoles, getUserGroupsByUserId } from "@/api";
 
 export default async function Dashboard() {
-  // const user = (await cookies()).get("userId")?.value;
+  const user = (await cookies()).get("userId")?.value;
   // if (!user) {
   //   redirect("/login");
   // }
+
   // const roles = await getAllExistingUserRoles();
   // const groups = await getUserGroupsByUserId(user);
   // const permissions = groups.map(({ groupId }) => {

@@ -1,4 +1,7 @@
 "use client";
+import Form from "next/form";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import {
   Table,
   TableBody,
@@ -15,8 +18,18 @@ import { Button } from "@/components/ui/button";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./ui/drawer";
 
-export function UserTable() {
+export function UserTable({ admin }) {
   const [users, setUsers] = useState(null);
   useEffect(() => {
     getAllUsers().then((res) => {
@@ -44,14 +57,61 @@ export function UserTable() {
               <TableCell className="text-right">{user.password}</TableCell>
               <TableCell className="">
                 <div className=" flex gap-5 ">
-                  <Button
-                    className="ml-auto"
-                    onClick={async () => {
-                      await updateUser(user.id);
-                    }}
-                  >
-                    <Pencil />
-                  </Button>
+                  <Drawer>
+                    <DrawerTrigger className="ml-auto">
+                      <Pencil />
+                    </DrawerTrigger>
+                    <DrawerContent>
+                      <Form
+                        action={async (formData: FormData) => {
+                          const body = {
+                            id: user.id,
+                            name: formData.get("name") || user.name,
+                            loginName:
+                              formData.get("loginName") || user.loginName,
+                            description:
+                              formData.get("description") || user.description,
+                            updatedBy: admin.id,
+                            updatedAt: new Date(),
+                            createdBy: "string",
+                            status: 0,
+                            passwordChanged: 0,
+                            passwordChangeable: 0,
+                            passwordValidTo: "2024-11-30",
+                            passwordResetToken: "string",
+                            passwordResetTokenExpiredAt: "2024-11-30",
+                            passwordSalt: "string",
+                          };
+                          let status = await updateUser(JSON.stringify(body));
+                          toast(`Updated ${user.name}`);
+                        }}
+                        className="max-w-96 container m-auto grid gap-4 py-14"
+                      >
+                        <DrawerHeader className="">
+                          <DrawerTitle>update {user.name}</DrawerTitle>
+                          <div>
+                            <Label htmlFor="name">Name</Label>
+                            <Input id="name" name="name" />
+                          </div>
+                          <div>
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" name="password" />
+                          </div>
+                          <div>
+                            <Label htmlFor="login">Username</Label>
+                            <Input id="login" name="loginName" />
+                          </div>
+                          <DrawerDescription></DrawerDescription>
+                        </DrawerHeader>
+                        <DrawerFooter>
+                          <Button type="submit">Submit</Button>
+                          <DrawerClose>
+                            <Button variant="outline">Cancel</Button>
+                          </DrawerClose>
+                        </DrawerFooter>
+                      </Form>
+                    </DrawerContent>
+                  </Drawer>
                   <Button
                     variant="destructive"
                     onClick={async () => {
@@ -67,7 +127,6 @@ export function UserTable() {
           ))}
         </TableBody>
       </Table>
-      //{" "}
     </ScrollArea>
   );
 }

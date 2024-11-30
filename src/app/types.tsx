@@ -1,3 +1,14 @@
+export interface PartialUser {
+    name: string,
+    loginName: string,
+    phone: string,
+    fax: string,
+    mobileNumber: string,
+    email: string,
+    clientNumber: string,
+    password: string
+}
+
 export interface User {
   id: 0;
   description: string;
@@ -16,6 +27,19 @@ export interface User {
   passwordResetToken: string;
   passwordResetTokenExpiredAt: Date;
   passwordSalt: string;
+}
+
+export interface PartialSupplier {
+    clientId: number,
+    number: string,
+    name: string,
+    streetHouseNumber: string,
+    zipCode: string,
+    city: string,
+    land: string,
+    phone: string,
+    fax: string,
+    email: string
 }
 
 export interface Supplier {

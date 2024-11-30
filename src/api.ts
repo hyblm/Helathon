@@ -4,11 +4,25 @@ import { redirect } from "next/navigation";
 import { FormState, LoginFormSchema } from "./app/lib/definitions";
 import { createSession } from "./app/lib/session";
 import * as Types from "./app/types";
+import {Type} from "lucide-react";
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
 const headers = {
-  securitytoken: process.env.SECURITY_TOKEN,
+  securitytoken: process.env.SECURITY_TOKEN
 };
+const postHeaders = {
+  "SecurityToken": "4aPU0WCyaM",
+  "Content-Type": "application/json"
+}
+
+const formDataToObject = (formData: FormData) => {
+  const obj: { [key: string]: string } = {};
+  formData.forEach((value, key) => {
+    obj[key] = value as string;
+  });
+  return obj;
+};
+
 async function call(endpoint: string) {
   const url = `${base_url}${endpoint}`;
   const res = await fetch(url, {
@@ -28,9 +42,9 @@ async function call(endpoint: string) {
 async function post(endpoint: string, body: string) {
   const url = `${base_url}${endpoint}`;
   const res = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     body: body,
-    headers: headers,
+    headers: {'Content-Type': 'application/json', 'SecurityToken': process.env.SECURITY_TOKEN}
   });
 
   console.log(res);
@@ -57,7 +71,7 @@ export async function login(state: FormState, formData: FormData) {
   console.log(formData);
   const user = await authenticateUser(formData.loginName, formData.password);
   if (user) {
-    await createSession(user?.id);
+    await createSession(user?.id.toString(), user?.name);
     redirect("/dashboard");
   }
 }
@@ -88,9 +102,15 @@ export async function authenticateUser(loginName: string, password: string) {
 }
 
 export async function createSupplier(formData: FormData) {
-  const newSupplier: Types.Supplier = formData;
+  let body: Types.PartialSupplier = formDataToObject(formData);
 
-  return call("suppliers/createSupplier", newSupplier);
+  console.log(JSON.stringify(body));
+
+  await post("suppliers/createSupplier", JSON.stringify(body))
+}
+
+export async function getClientSuppliers(id: string) {
+  return call(`suppliers/getSuppliersOfClientWithId?clientId=${id}`);
 }
 
 export async function getClientByNumber(number: string) {

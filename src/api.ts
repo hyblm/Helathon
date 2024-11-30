@@ -4,16 +4,18 @@ import { redirect } from "next/navigation";
 import { FormState, LoginFormSchema } from "./app/lib/definitions";
 import { createSession } from "./app/lib/session";
 import * as Types from "./app/types";
-import {Type} from "lucide-react";
+import { Type } from "lucide-react";
 
 const base_url = "https://www.hella.com/webEdiPersistence/";
 const headers = {
-  securitytoken: process.env.SECURITY_TOKEN
+  securitytoken: process.env.SECURITY_TOKEN,
+  "Content-Type": "application/json",
+  Accept: "application/json",
 };
 const postHeaders = {
-  "SecurityToken": "4aPU0WCyaM",
-  "Content-Type": "application/json"
-}
+  SecurityToken: "4aPU0WCyaM",
+  "Content-Type": "application/json",
+};
 
 const formDataToObject = (formData: FormData) => {
   const obj: { [key: string]: string } = {};
@@ -42,9 +44,12 @@ async function call(endpoint: string) {
 async function post(endpoint: string, body: string) {
   const url = `${base_url}${endpoint}`;
   const res = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     body: body,
-    headers: {'Content-Type': 'application/json', 'SecurityToken': process.env.SECURITY_TOKEN}
+    headers: {
+      "Content-Type": "application/json",
+      SecurityToken: process.env.SECURITY_TOKEN,
+    },
   });
 
   console.log(res);
@@ -69,36 +74,41 @@ export async function getAllClientNumbers() {
 
 export async function login(state: FormState, formData: FormData) {
   console.log(formData);
-  const user = await authenticateUser(formData.loginName, formData.password);
-  if (user) {
-    await createSession(user?.id.toString(), user?.name);
+  const user = await authenticateUser(
+    formData.get("loginName"),
+    formData.get("password"),
+  );
+  console.log(user);
+  if (user && user.id) {
+    await createSession(user?.id);
     redirect("/dashboard");
   }
+  return user;
 }
 
 export async function authenticateUser(loginName: string, password: string) {
-  return {
-    id: 58,
-    description: "string",
-    name: "asdf",
-    password: "asdfasdf",
-    loginName: "asdf",
-    updatedBy: "string",
-    updatedAt: "2024-11-30",
-    createdBy: "string",
-    createdAt: "2024-11-30",
-    lastLogin: "2024-11-30",
-    status: 0,
-    passwordChanged: 0,
-    passwordChangeable: 0,
-    passwordValidTo: "2024-11-30",
-    passwordResetToken: "string",
-    passwordResetTokenExpiredAt: "2024-11-30",
-    passwordSalt: "string",
-  };
-  // return call(
-  //   `users/authenticateUser?loginName=${loginName}&password=${password}`,
-  // );
+  // return {
+  //   id: 58,
+  //   description: "string",
+  //   name: "asdf",
+  //   password: "asdfasdf",
+  //   loginName: "asdf",
+  //   updatedBy: "string",
+  //   updatedAt: "2024-11-30",
+  //   createdBy: "string",
+  //   createdAt: "2024-11-30",
+  //   lastLogin: "2024-11-30",
+  //   status: 0,
+  //   passwordChanged: 0,
+  //   passwordChangeable: 0,
+  //   passwordValidTo: "2024-11-30",
+  //   passwordResetToken: "string",
+  //   passwordResetTokenExpiredAt: "2024-11-30",
+  //   passwordSalt: "string",
+  // };
+  const url = `users/authenticateUser?loginName=${loginName}&password=${password}`;
+  console.log(url);
+  return call(url);
 }
 
 export async function createSupplier(formData: FormData) {
@@ -106,7 +116,7 @@ export async function createSupplier(formData: FormData) {
 
   console.log(JSON.stringify(body));
 
-  await post("suppliers/createSupplier", JSON.stringify(body))
+  await post("suppliers/createSupplier", JSON.stringify(body));
 }
 
 export async function getClientSuppliers(id: string) {
@@ -157,4 +167,12 @@ export async function deleteUser(id: string) {
 
 export async function updateUser(id: string) {
   return "not implemented";
+}
+
+export async function getUserGroupsByUserId(id: string) {
+  return call(`users/getUserGroupsByUserId?userId=${id}`);
+}
+
+export async function getSuppliersWithAdminUserId(id: string) {
+  return call(`users/getSuppliersWithAdminUserId?userId=${id}`);
 }
